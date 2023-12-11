@@ -21,3 +21,78 @@ services:
 ## Build locally
 
 The [`docker-compose.yml`](./docker-compose.yml) file included here automatically builds locally the image and provide an example by mounting the [`budget-website.org`](./budget-website.org/) folder as a test PHP website.
+
+## Data
+
+### Categories and Subcategories
+
+**Expense Categories:**
+
+- Housing:
+  - Rent/Mortgage
+  - Utilities (Electricity, Water, Gas)
+  - Property Taxes
+  - Home Insurance
+  - Maintenance/Repairs
+  
+- Transportation:
+  - Fuel
+  - Public Transportation
+  - Vehicle Maintenance
+  - Insurance
+  - Parking/Tolls
+
+- Food:
+  - Groceries
+  - Dining Out
+  - Fast Food
+  
+- Health:
+  - Health Insurance
+  - Medications
+  - Doctor Visits
+  - Gym Memberships
+
+- Entertainment:
+  - Movies/Streaming Services
+  - Concerts/Events
+  - Hobbies
+  - Subscriptions (Magazines, etc.)
+
+- Debt Payments:
+  - Credit Card Payments
+  - Loan Payments
+
+- Personal Care:
+  - Haircuts
+  - Toiletries
+  - Clothing
+
+- Education:
+  - Tuition
+  - Books/Supplies
+  - Courses/Workshops
+
+- Savings:
+  - Emergency Fund
+  - Retirement Savings
+  - Other Savings Goals
+
+- Miscellaneous:
+  - Gifts
+  - Donations
+  - Pet Care
+
+**Income Categories:**
+
+- Salary/Wages:
+  - Primary Job
+  - Secondary Job/Part-Time Work
+
+- Investment Income:
+  - Dividends
+  - Capital Gains
+
+- Other Income:
+  - Gifts/Inheritance
+  - Lottery/Gambling Winnings
