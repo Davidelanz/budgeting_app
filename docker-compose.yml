@@ -6,6 +6,6 @@ services:
     build:
       dockerfile: ./Dockerfile
     volumes:
-      - ./test-website/htdocs:/home/htdocs
+      - ./budget-website/htdocs:/home/htdocs
     ports:
       - 8901:8889

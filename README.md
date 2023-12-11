@@ -1,4 +1,6 @@
-<h1> Apache on PHP Development Docker Image</h1>
+<h1> Budget App</h1>
+
+Budget web-app maintained by [Federico Puppo](https://github.com/fedem-p) and [Davide Lanza](https://github.com/Davidelanz)
 
 ## How to use
 
@@ -18,4 +20,4 @@ services:
 
 ## Build locally
 
-The [`docker-compose.yml`](./docker-compose.yml) file included here automatically builds locally the image and provide an example by mounting the [`test-website.org`](./test-website.org/) folder as a test PHP website.
+The [`docker-compose.yml`](./docker-compose.yml) file included here automatically builds locally the image and provide an example by mounting the [`budget-website.org`](./budget-website.org/) folder as a test PHP website.
