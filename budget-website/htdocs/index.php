@@ -7,6 +7,7 @@ $csvData = CsvReader\readCSV($csvFile);
 if (empty($csvData)) {
     echo 'Error reading CSV file.';
 }
+$csvData = CsvReader\sortCSVByDate($csvData);
 ?>
 
 <!DOCTYPE html>
