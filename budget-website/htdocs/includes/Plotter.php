@@ -42,7 +42,7 @@ function generateCumulativeBalancePlot($csvData) {
     foreach ($csvData as $row) {
         // Assuming the date is in the first column, and amount is in the second column
         $date = $row[0];
-        $amount = (int)$row[1]; // Convert amount to integer
+        $amount = (int)$row[2]; // Convert amount to integer
 
         // Skip invalid or empty dates
         if (strtotime($date) === false) {
@@ -101,8 +101,8 @@ function generateMonthlyIncomeExpensesBarChart($csvData) {
 
     foreach ($csvData as $row) {
         $date = $row[0];
-        $amount = (int)$row[1];
-        $category = $row[3]; // Assuming category is in the fourth column
+        $amount = (int)$row[2];
+        $category = $row[4]; // Assuming category is in the fourth column
 
         if (strtotime($date) === false) {
             continue;
@@ -173,8 +173,8 @@ function generateExpenseCategoriesPieChart($csvData) {
     $categoryData = [];
 
     foreach ($csvData as $row) {
-        $amount = (int)$row[1];
-        $category = $row[3]; // Assuming category is in the fourth column
+        $amount = (int)$row[2];
+        $category = $row[4]; // Assuming category is in the fourth column
 
         if ($amount < 0) {
             if (!isset($categoryData[$category])) {

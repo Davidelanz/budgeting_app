@@ -114,4 +114,23 @@ function displayCSVTable($csvData) {
     echo '</tbody></table>';
 }
 
+/**
+ * Sort CSV Data by Date
+ *
+ * Sorts CSV data by the "date" column in ascending order.
+ *
+ * @param array $csvData The CSV data to be sorted.
+ *
+ * @return array The sorted CSV data.
+ */
+function sortCSVByDate($csvData) {
+    usort($csvData, function ($a, $b) {
+        $dateA = strtotime($a[0]);
+        $dateB = strtotime($b[0]);
+
+        return $dateA <=> $dateB;
+    });
+
+    return $csvData;
+}
 ?>
