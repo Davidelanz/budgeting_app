@@ -1,91 +1,35 @@
 <?php
-require_once dirname(__FILE__) . '/includes/CsvReader.php';
-require_once dirname(__FILE__) . '/includes/Plotter.php';
+require_once dirname(__FILE__) . "/includes/_RequireAll.php";
 
-$csvFile = dirname(__FILE__) . '/data/budget_entries.csv';
-$csvData = CsvReader\readCSV($csvFile);
-if (empty($csvData)) {
-    echo 'Error reading CSV file.';
+$method = $_SERVER["REQUEST_METHOD"];
+$path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+
+// Define routes
+$routes = [
+    "GET" => [
+        "/" => "homePage",
+        "/api/download.csv" => "Api\Download\CSV",
+        "/api/transactions.json" => "Api\Transactions\getArrayofArrays",
+        "/api/operations.json" => "getOperations",
+        "/api/accounts.json" => "getAccounts",
+        "/api/categories.json" => "getCategories",
+        "/api/categories/subcategories.json" => "getSubcategoriesByCategory",
+        "/api/subcategories.json" => "getSubcategories",
+    ],
+    "POST" => [
+        "/api/upload.csv" => "uploadCSV",
+    ],
+];
+
+// Execute the corresponding function based on the route
+if (isset($routes[$method][$path])) {
+    $function = $routes[$method][$path];
+    if ($function === "homePage") {
+        include "home.php";
+    } else {
+        echo $function();
+    }
+} else {
+    http_response_code(404);
+    echo json_encode(["error" => "Endpoint not found"]);
 }
-$csvData = CsvReader\sortCSVByDate($csvData);
-?>
-
-<!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Budgeting App</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-</head>
-
-<body>
-
-    <header>
-        <div class="navbar navbar-dark bg-dark box-shadow">
-            <div class="container d-flex justify-content-between">
-                <a href="#" class="navbar-brand d-flex align-items-center">
-                    Budget App
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <main role="main">
-
-        <div class="album py-5 bg-light">
-            <div class="container">
-
-                <div class="row">
-                    <div class="col">
-                        <div class="card mb-4 box-shadow">
-                            <div class="card-body">
-                                <?= Plotter\generateCumulativeBalancePlot($csvData); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="card mb-4 box-shadow">
-                            <div class="card-body">
-                                <?= Plotter\generateMonthlyIncomeExpensesBarChart($csvData); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="card mb-4 box-shadow">
-                            <div class="card-body">
-                                <?= Plotter\generateExpenseCategoriesPieChart($csvData); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="card mb-4 box-shadow">
-                            <div class="card-body">
-                                <?= CsvReader\displayCSVTable($csvData); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
-
-    </main>
-
-</body>
-
-</html>

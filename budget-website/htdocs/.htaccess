@@ -1,0 +1,9 @@
+# It seems like your web server is interpreting the URL path as a file path and trying to find a file at that location. To resolve this issue, you can configure your web server to redirect all requests to your index.php file. This way, the PHP script can handle routing based on the URL path.
+# To solve it, create or modify your .htaccess file in the root directory of your project with the following content.
+# After making these changes, restart your web server. This should resolve the issue, and your PHP script should be able to handle the routing correctly.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
