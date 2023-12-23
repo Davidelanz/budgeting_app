@@ -10,9 +10,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <!-- Plotly -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- Custom JS -->
     <script src="./plotly_functions.js"></script>
-    <!-- Tables -->
     <script src="./table_functions.js"></script>
+    <script src="./utility_functions.js"></script>
 </head>
 
 <body>
@@ -53,10 +54,37 @@
                             <div class="card-body mx-2 pt-2">
                                 <code>
                                     &nbsp;___&nbsp;&nbsp;___&nbsp;&nbsp;&nbsp;___&nbsp;&nbsp;_&nbsp;__<br>
-                                    / __|/ _ \ / _ \| '_ \ <br>
+                                    / __|/ _ \ / _ \| &nbsp;_ \ <br>
                                     \__ \ (_) | (_) | | | |<br>
                                     |___/\___/ \___/|_| |_|<br>
                                 </code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- This Month by Category card-->
+                <div class="row">
+                    <div class="col">
+                        <div class="card mb-4 box-shadow">
+                            <h2 class="card-title m-4 mb-1">This Month by Category</h2>
+                            <div class="card-body mx-2 pt-2">
+                                <p><a href="/api/transactions.json"><code>GET /api/transactions.json</code></a></p>
+                                <div id="thisMonthHistogram">
+                                    <!-- Plotly graph -->
+                                </div>
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                        var startDate = dateToQueryString(startOfThisMonth());
+                                        var endDate = dateToQueryString(endOfThisMonth());
+                                        fetch("/api/transactions/categories.json?start_date=" + startDate + "&end_date=" + endDate)
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                createCategoriesHistogram(data, "thisMonthHistogram");
+                                            })
+                                            .catch(error => console.error("Error fetching data:", error));
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>
@@ -70,7 +98,7 @@
                             <div class="card-body mx-2 pt-2">
                                 <code>
                                     &nbsp;___&nbsp;&nbsp;___&nbsp;&nbsp;&nbsp;___&nbsp;&nbsp;_&nbsp;__<br>
-                                    / __|/ _ \ / _ \| '_ \ <br>
+                                    / __|/ _ \ / _ \| &nbsp;_ \ <br>
                                     \__ \ (_) | (_) | | | |<br>
                                     |___/\___/ \___/|_| |_|<br>
                                 </code>
@@ -78,6 +106,34 @@
                         </div>
                     </div>
                 </div>
+
+                    <!-- This Year by Category card-->
+                    <div class="row">
+                    <div class="col">
+                        <div class="card mb-4 box-shadow">
+                            <h2 class="card-title m-4 mb-1">This Year by Category</h2>
+                            <div class="card-body mx-2 pt-2">
+                                <p><a href="/api/transactions.json"><code>GET /api/transactions.json</code></a></p>
+                                <div id="thisYearHistogram">
+                                    <!-- Plotly graph -->
+                                </div>
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                        var startDate = dateToQueryString(startOfThisYear());
+                                        var endDate = dateToQueryString(endOfThisYear());
+                                        fetch("/api/transactions/categories.json?start_date=" + startDate + "&end_date=" + endDate)
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                createCategoriesHistogram(data, "thisYearHistogram");
+                                            })
+                                            .catch(error => console.error("Error fetching data:", error));
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <!-- Last 3 Years by Category card -->
                 <div class="row">
@@ -87,7 +143,7 @@
                             <div class="card-body mx-2 pt-2">
                                 <code>
                                     &nbsp;___&nbsp;&nbsp;___&nbsp;&nbsp;&nbsp;___&nbsp;&nbsp;_&nbsp;__<br>
-                                    / __|/ _ \ / _ \| '_ \ <br>
+                                    / __|/ _ \ / _ \| &nbsp;_ \ <br>
                                     \__ \ (_) | (_) | | | |<br>
                                     |___/\___/ \___/|_| |_|<br>
                                 </code>

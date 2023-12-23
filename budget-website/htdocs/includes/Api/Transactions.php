@@ -65,3 +65,35 @@ function getArrayofArrays()
 
     return json_encode($result);
 }
+
+
+/**
+ * Calculates and retrieves the subtotal for each category within the specified date range.
+ *
+ * @return string JSON-encoded array of category subtotals.
+ */
+function getCategorySubtotals()
+{
+    $filteredTransactions = json_decode(getArrayofObjects(), true);
+
+    $categorySubtotals = [];
+
+    foreach ($filteredTransactions as $transaction) {
+        $category = $transaction["category"];
+        $amount = (float)$transaction["amount"];
+
+        if (!isset($categorySubtotals[$category])) {
+            $categorySubtotals[$category] = 0;
+        }
+
+        $categorySubtotals[$category] += $amount;
+    }
+
+    // Convert the associative array to an indexed array
+    $result = [];
+    foreach ($categorySubtotals as $category => $subtotal) {
+        $result[] = ["category" => $category, "subtotal" => $subtotal];
+    }
+
+    return json_encode($result);
+}

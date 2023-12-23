@@ -1,4 +1,9 @@
 /**
+ * @module TableUtilities
+ * @description A module providing utility functions for creating Tables.
+ */
+
+/**
  * Generates a category table and appends it to the specified HTML element.
  *
  * This function takes a data object containing categories and their subcategories
@@ -7,6 +12,9 @@
  *
  * @param {Object} data - An object containing categories and their subcategories.
  * @param {string} targetElementId - The HTML element ID where the table should be appended.
+ * @function
+ * @name generateCategoryTable
+ * @memberof TableUtilities
  */
 function generateCategoryTable(data, targetElementId) {
     var tableBody = document.getElementById(targetElementId);
@@ -44,6 +52,9 @@ function generateCategoryTable(data, targetElementId) {
  *
  * @param {Array} data - An array of operations.
  * @param {string} targetElementId - The HTML element ID where the table should be appended.
+ * @function
+ * @name generateOperationsTable
+ * @memberof TableUtilities
  */
 function generateOperationsTable(data, targetElementId) {
     var tableBody = document.getElementById(targetElementId);
@@ -68,6 +79,9 @@ function generateOperationsTable(data, targetElementId) {
  *
  * @param {Array} data - An array of accounts.
  * @param {string} targetElementId - The HTML element ID where the table should be appended.
+ * @function
+ * @name generateAccountsTable
+ * @memberof TableUtilities
  */
 function generateAccountsTable(data, targetElementId) {
     var tableBody = document.getElementById(targetElementId);

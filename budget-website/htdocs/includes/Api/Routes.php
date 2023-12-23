@@ -34,6 +34,10 @@ function Routes()
                 "handler" => "Api\Transactions\getArrayofArrays",
                 "description" => "Get transaction data based on date range"
             ],
+            "/api/transactions/categories.json" => [
+                "handler" => "Api\Transactions\getCategorySubtotals",
+                "description" => "Get transaction subtotals grouped by category and subcategory on date range"
+            ],
             "/api/categories.json" => [
                 "handler" => "Api\Categories\getTree",
                 "description" => "List all unique category names with all unique subcategories within"
