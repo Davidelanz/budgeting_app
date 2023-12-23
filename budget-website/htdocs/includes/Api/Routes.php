@@ -27,27 +27,31 @@ function Routes()
                 "description" => "Homepage",
             ],
             "/api/download.csv" => [
-                "handler" => "Api\Download\CSV",
+                "handler" => "\Api\Download\CSV",
                 "description" => "Download CSV data",
             ],
             "/api/transactions.json" => [
-                "handler" => "Api\Transactions\getArrayofArrays",
+                "handler" => "\Api\Transactions\getArrayofArrays",
                 "description" => "Get transaction data based on date range"
             ],
             "/api/transactions/categories.json" => [
-                "handler" => "Api\Transactions\getCategorySubtotals",
+                "handler" => "\Api\Transactions\getCategorySubtotals",
                 "description" => "Get transaction subtotals grouped by category and subcategory on date range"
             ],
+            "/api/transactions/cumulative_daily.json" => [
+                "handler" => "\Api\Transactions\getDailyCumulative",
+                "description" => "Get transaction cumulative sum day-by-day on date range"
+            ],
             "/api/categories.json" => [
-                "handler" => "Api\Categories\getTree",
+                "handler" => "\Api\Categories\getTree",
                 "description" => "List all unique category names with all unique subcategories within"
             ],
             "/api/operations.json" => [
-                "handler" => "Api\Operations\getList",
+                "handler" => "\Api\Operations\getList",
                 "description" => "List all unique operation names"
             ],
             "/api/accounts.json" => [
-                "handler" => "Api\Accounts\getList",
+                "handler" => "\Api\Accounts\getList",
                 "description" => "List all unique account names"
             ],
         ],

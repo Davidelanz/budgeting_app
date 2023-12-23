@@ -40,7 +40,7 @@
                             <h2 class="card-title m-4 mb-1">Welcome to the Budgeting Web App</h2>
                             <div class="card-body mx-2 pt-2">
                                 <p>This is a simple budgeting web app that allows you to manage your transactions.</p>
-                                <?= Api\generateApiDocumentation(); ?>
+                                <?= \Api\generateApiDocumentation(); ?>
                             </div>
                         </div>
                     </div>
@@ -52,12 +52,19 @@
                         <div class="card mb-4 box-shadow">
                             <h2 class="card-title m-4 mb-1">Overall</h2>
                             <div class="card-body mx-2 pt-2">
-                                <code>
-                                    &nbsp;___&nbsp;&nbsp;___&nbsp;&nbsp;&nbsp;___&nbsp;&nbsp;_&nbsp;__<br>
-                                    / __|/ _ \ / _ \| &nbsp;_ \ <br>
-                                    \__ \ (_) | (_) | | | |<br>
-                                    |___/\___/ \___/|_| |_|<br>
-                                </code>
+                                <div id="overallChart">
+                                    <!-- Plotly graph -->
+                                </div>
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                        fetch("/api/transactions/cumulative_daily.json")
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                createCumulativeChart(data, "overallChart");
+                                            })
+                                            .catch(error => console.error("Error fetching data:", error));
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>
@@ -107,8 +114,8 @@
                     </div>
                 </div>
 
-                    <!-- This Year by Category card-->
-                    <div class="row">
+                <!-- This Year by Category card-->
+                <div class="row">
                     <div class="col">
                         <div class="card mb-4 box-shadow">
                             <h2 class="card-title m-4 mb-1">This Year by Category</h2>

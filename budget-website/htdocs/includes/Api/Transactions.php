@@ -97,3 +97,30 @@ function getCategorySubtotals()
 
     return json_encode($result);
 }
+
+/**
+ * Calculates and retrieves the cumulative total amount day-by-day.
+ *
+ * @return string JSON-encoded array of cumulative total amounts day-by-day.
+ */
+function getDailyCumulative()
+{
+    $filteredTransactions = json_decode(getArrayofObjects(), true);
+
+    $cumulativeTotal = 0;
+    $cumulativeTotalByDay = [];
+
+    foreach ($filteredTransactions as $transaction) {
+        $date = $transaction["date"];
+        $amount = (float)$transaction["amount"];
+
+        if (!isset($cumulativeTotalByDay[$date])) {
+            $cumulativeTotalByDay[$date] = 0;
+        }
+
+        $cumulativeTotal += $amount;
+        $cumulativeTotalByDay[$date] = $cumulativeTotal;
+    }
+
+    return json_encode($cumulativeTotalByDay);
+}

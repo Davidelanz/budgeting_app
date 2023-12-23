@@ -39,47 +39,78 @@ function defaultLayout() {
 }
 
 /**
- * Creates a Plotly table from an array of arrays and appends it to the specified HTML element.
+ * Creates a line chart using Plotly to display cumulative amounts over time.
  *
- * This function takes an array of arrays as input, assumes the first array contains headers,
- * transposes the data, and creates a Plotly table. It then appends the table to the specified
- * HTML element identified by the targetElementId.
+ * This function expects an object with dates as keys and cumulative amounts as values.
+ * It creates a line chart where the x-axis represents dates, the y-axis represents
+ * cumulative amounts, and each point on the line represents the cumulative amount
+ * at a specific date.
  *
- * @param {Array} arrayOfArraysValues - An array of arrays containing table data.
- * @param {string} targetElementId - The HTML element ID where the table should be appended.
+ * @param {Object} data - An object with dates as keys and cumulative amounts as values.
+ * @param {string} targetElementId - The HTML element ID where the line chart should be appended.
  * @function
- * @name createTransactionsTable
+ * @name createCumulativeChart
  * @memberof PlotlyUtilities
  * @example
- * const tableData = [
- *   ["date", "operation", "amount", "category"],
- *   ["2022-01-01", "income", 100, "Salary"],
- *   ["2022-01-02", "expense", 30, "Food"],
+ * const data = {
+ *   "2021-11-01": 100,
+ *   "2021-11-12": 90,
+ *   "2021-12-01": 2817.46,
  *   // ... more data
- * ];
- * createTransactionsTable(tableData, "tableElement");
+ * };
+ * createCumulativeChart(data, "lineChartElement");
  */
-function createTransactionsTable(arrayOfArraysValues, targetElementId) {
-    // Pop the first array containing headers
-    headerValues = arrayOfArraysValues.splice(0, 1);
-    // We expect arrayOfArraysValues as an array of array, but plotly likes the other way around
-    headerValues = transpose(headerValues);
-    transposedValues = transpose(arrayOfArraysValues);
-    // Retrieve header color assuming you have the CSS variable defined
-    var headerColor = getComputedStyle(document.documentElement).getPropertyValue('--bs-secondary');
-    // Create table data
-    var tableData = [{
-        type: 'table',
-        header: {
-            values: headerValues,
-            fill: { color: headerColor },
-            font: { color: "white" }
+function createCumulativeChart(data, targetElementId) {
+    // Extract dates and cumulative amounts
+    var dates = Object.keys(data);
+    var cumulativeAmounts = Object.values(data);
+
+    // Convert dates to JavaScript Date objects for better handling
+    var dateObjects = dates.map(date => new Date(date));
+
+    // Create trace for the line chart
+    var trace = {
+        x: dateObjects,
+        y: cumulativeAmounts,
+        type: 'scatter',
+        mode: 'lines',
+        name: 'Cumulative Amount (EUR)',
+    };
+
+    // Extract the first day of each month
+    var firstDaysOfMonth = dateObjects.filter((date, index, array) => {
+        // Include the first day or if it's the first data point
+        return index === 0 || date.getMonth() !== array[index - 1].getMonth();
+    });
+
+    // Map the first days of each month back to string format for display
+    var firstDaysLabels = firstDaysOfMonth.map(date => {
+        // Format the date as YYYY-MM-DD
+        var year = date.getFullYear();
+        var month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+        var day = date.getDate().toString().padStart(2, '0');
+        return new Date(`${year}-${month}-${day}`);
+    });
+
+    // Create layout
+    var layout = {
+        title: 'Amount Over Time',
+        margin: { l: 50, r: 20, b: 40, t: 40 },
+        paper_bgcolor: 'rgba(0,0,0,0)', // make it transparent
+        plot_bgcolor: 'rgba(0,0,0,0)', // make it transparent
+        xaxis: {
+            title: 'Date',
+            type: 'date'
         },
-        cells: { values: transposedValues }
-    }];
+        yaxis: {
+            title: 'EUR',
+        },
+    };
+
     // Generate plot
-    Plotly.newPlot(targetElementId, tableData, defaultLayout());
+    Plotly.newPlot(targetElementId, [trace], layout);
 }
+
 
 /**
  * Creates a histogram using Plotly based on category subtotals.
@@ -131,4 +162,47 @@ function createCategoriesHistogram(subtotalValues, targetElementId) {
 
     // Generate plot
     Plotly.newPlot(targetElementId, traces, layout);
+}
+
+/**
+ * Creates a Plotly table from an array of arrays and appends it to the specified HTML element.
+ *
+ * This function takes an array of arrays as input, assumes the first array contains headers,
+ * transposes the data, and creates a Plotly table. It then appends the table to the specified
+ * HTML element identified by the targetElementId.
+ *
+ * @param {Array} arrayOfArraysValues - An array of arrays containing table data.
+ * @param {string} targetElementId - The HTML element ID where the table should be appended.
+ * @function
+ * @name createTransactionsTable
+ * @memberof PlotlyUtilities
+ * @example
+ * const tableData = [
+ *   ["date", "operation", "amount", "category"],
+ *   ["2022-01-01", "income", 100, "Salary"],
+ *   ["2022-01-02", "expense", 30, "Food"],
+ *   // ... more data
+ * ];
+ * createTransactionsTable(tableData, "tableElement");
+ */
+function createTransactionsTable(arrayOfArraysValues, targetElementId) {
+    // Pop the first array containing headers
+    headerValues = arrayOfArraysValues.splice(0, 1);
+    // We expect arrayOfArraysValues as an array of array, but plotly likes the other way around
+    headerValues = transpose(headerValues);
+    transposedValues = transpose(arrayOfArraysValues);
+    // Retrieve header color assuming you have the CSS variable defined
+    var headerColor = getComputedStyle(document.documentElement).getPropertyValue('--bs-secondary');
+    // Create table data
+    var tableData = [{
+        type: 'table',
+        header: {
+            values: headerValues,
+            fill: { color: headerColor },
+            font: { color: "white" }
+        },
+        cells: { values: transposedValues }
+    }];
+    // Generate plot
+    Plotly.newPlot(targetElementId, tableData, defaultLayout());
 }
