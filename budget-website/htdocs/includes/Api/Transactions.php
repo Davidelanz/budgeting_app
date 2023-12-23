@@ -2,6 +2,15 @@
 
 namespace Api\Transactions;
 
+/**
+ * Retrieves an array of transactions in JSON format.
+ *
+ * This function fetches all transactions from the CSV file and filters them based on the
+ * provided start and end dates (if specified in the GET parameters). The filtered transactions
+ * are returned as an array of objects in JSON format.
+ *
+ * @return string JSON-encoded array of transactions.
+ */
 function getArrayofObjects()
 {
     $transactions = \Data\DataIO\readCSV();
@@ -16,6 +25,15 @@ function getArrayofObjects()
     return json_encode($filteredTransactions);
 }
 
+/**
+ * Retrieves an array of transactions in JSON format with a specific structure.
+ *
+ * This function fetches all transactions from the CSV file and filters them based on the
+ * provided start and end dates (if specified in the GET parameters). The filtered transactions
+ * are returned as an array of arrays with a specific structure (including a header row) in JSON format.
+ *
+ * @return string JSON-encoded array of transactions with a specific structure.
+ */
 function getArrayofArrays()
 {
     $transactions = \Data\DataIO\readCSV();

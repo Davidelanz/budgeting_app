@@ -2,10 +2,18 @@
 
 namespace Api\Download;
 
-
+/**
+ * Generates and initiates the download of a CSV file containing transaction data.
+ *
+ * This function reads transaction data, sets appropriate CSV download headers, and outputs
+ * the data to the browser for download. The CSV file includes headers: date, operation, amount,
+ * account, category, subcategory, and note.
+ *
+ * @return void This function does not return a value but exits to prevent further output.
+ */
 function CSV()
 {
-    // Fetch data
+    // Fetch transaction data from CSV
     $transactions = \Data\DataIO\readCSV();
 
     // Set headers for CSV download
@@ -18,10 +26,10 @@ function CSV()
     // Create a file pointer connected to the output stream
     $output = fopen('php://output', 'w');
 
-    // Output the headers
+    // Output CSV headers
     fputcsv($output, ["date", "operation", "amount", "account", "category", "subcategory", "note"]);
 
-    // Output the data
+    // Output transaction data
     foreach ($transactions as $transaction) {
         fputcsv($output, $transaction);
     }
