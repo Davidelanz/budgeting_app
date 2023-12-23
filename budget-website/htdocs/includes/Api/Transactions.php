@@ -22,6 +22,7 @@ function getArrayofObjects()
         return $transactionDate >= $startDate && $transactionDate <= $endDate;
     });
 
+    sort($filteredTransactions);
     return json_encode($filteredTransactions);
 }
 
@@ -63,6 +64,7 @@ function getArrayofArrays()
         ];
     }
 
+    sort($result);
     return json_encode($result);
 }
 
@@ -124,3 +126,68 @@ function getDailyCumulative()
 
     return json_encode($cumulativeTotalByDay);
 }
+
+/**
+ * Calculates and retrieves the cumulative total amount day-by-day for each account.
+ *
+ * This function processes a list of transactions, calculates the cumulative total
+ * amount for each account on a daily basis, and returns the results in JSON format.
+ *
+ * @return string JSON-encoded array of cumulative total amounts day-by-day for each account.
+ * @function
+ * @name getDailyCumulativeByAccount
+ * @memberof Transactions
+ * @example
+ * // Example JSON output:
+ * // {
+ * //   "Account1": {
+ * //     "2021-11-01": 100,
+ * //     "2021-11-12": 190,
+ * //     "2021-12-01": 300,
+ * //     // ... more dates
+ * //   },
+ * //   "Account2": {
+ * //     "2021-11-01": 50,
+ * //     "2021-11-12": 80,
+ * //     "2021-12-01": 120,
+ * //     // ... more dates
+ * //   },
+ * //   // ... more accounts
+ * // }
+ */
+function getDailyCumulativeByAccount()
+{
+    // Retrieve filtered transactions from the CSV file
+    $filteredTransactions = json_decode(getArrayofObjects(), true);
+
+    // Initialize an array to store cumulative totals for each account and date
+    $cumulativeTotalByAccount = [];
+
+    // Initialize a buffer to store the last date with an amount for each account
+    $lastDateBuffer = [];
+
+    // Process each transaction to calculate cumulative totals
+    foreach ($filteredTransactions as $transaction) {
+        $date = $transaction["date"];
+        $amount = (float)$transaction["amount"];
+        $account = $transaction["account"];
+
+        if (!isset($cumulativeTotalByAccount[$account])) {
+            $cumulativeTotalByAccount[$account] = [];
+            $cumulativeTotalByAccount[$account][$date] = $amount;
+            $lastDate = $date;
+        } else {
+            // Get the last date with an amount for the current account from the buffer
+            $lastDate = $lastDateBuffer[$account];
+            $cumulativeFromPreviousDate = $cumulativeTotalByAccount[$account][$lastDate];
+            // Calculate the cumulative total for the current date and account
+            $cumulativeTotalByAccount[$account][$date] = $cumulativeFromPreviousDate + $amount;
+        }
+
+        // Update the last date buffer for the current account
+        $lastDateBuffer[$account] = $date;
+    }
+
+    return json_encode($cumulativeTotalByAccount);
+}
+

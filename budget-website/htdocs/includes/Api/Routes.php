@@ -42,6 +42,10 @@ function Routes()
                 "handler" => "\Api\Transactions\getDailyCumulative",
                 "description" => "Get transaction cumulative sum day-by-day on date range"
             ],
+            "/api/transactions/cumulative_daily_by_account.json" => [
+                "handler" => "\Api\Transactions\getDailyCumulativeByAccount",
+                "description" => "Get transaction cumulative day-by-day subtotal for each account on date range"
+            ],
             "/api/categories.json" => [
                 "handler" => "\Api\Categories\getTree",
                 "description" => "List all unique category names with all unique subcategories within"

@@ -64,6 +64,14 @@
                                             })
                                             .catch(error => console.error("Error fetching data:", error));
                                     });
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                        fetch("/api/transactions/cumulative_daily_by_account.json")
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                appendCumulativeChartByAccount(data, "overallChart");
+                                            })
+                                            .catch(error => console.error("Error fetching data:", error));
+                                    });
                                 </script>
                             </div>
                         </div>

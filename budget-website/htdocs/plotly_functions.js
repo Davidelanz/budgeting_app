@@ -77,21 +77,6 @@ function createCumulativeChart(data, targetElementId) {
         name: 'Cumulative Amount (EUR)',
     };
 
-    // Extract the first day of each month
-    var firstDaysOfMonth = dateObjects.filter((date, index, array) => {
-        // Include the first day or if it's the first data point
-        return index === 0 || date.getMonth() !== array[index - 1].getMonth();
-    });
-
-    // Map the first days of each month back to string format for display
-    var firstDaysLabels = firstDaysOfMonth.map(date => {
-        // Format the date as YYYY-MM-DD
-        var year = date.getFullYear();
-        var month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
-        var day = date.getDate().toString().padStart(2, '0');
-        return new Date(`${year}-${month}-${day}`);
-    });
-
     // Create layout
     var layout = {
         title: 'Amount Over Time',
@@ -111,6 +96,62 @@ function createCumulativeChart(data, targetElementId) {
     Plotly.newPlot(targetElementId, [trace], layout);
 }
 
+/**
+ * Appends traces to an existing Plotly line chart to display cumulative amounts over time for multiple accounts.
+ *
+ * This function expects an object with account keys, where each key contains an object with dates as keys
+ * and cumulative amounts as values. It appends a separate line for each account to the existing line chart.
+ *
+ * @param {Object} multiAccountData - An object with account keys, each containing an object with dates and cumulative amounts.
+ * @param {string} targetElementId - The HTML element ID of the existing line chart to which traces will be appended.
+ * @function
+ * @name appendCumulativeChartByAccount
+ * @memberof PlotlyUtilities
+ * @example
+ * const multiAccountData = {
+ *   "Account1": {
+ *     "2021-11-01": 100,
+ *     "2021-11-12": 90,
+ *     "2021-12-01": 2817.46,
+ *     // ... more data
+ *   },
+ *   "Account2": {
+ *     "2021-11-01": 50,
+ *     "2021-11-12": 120,
+ *     "2021-12-01": 2200.34,
+ *     // ... more data
+ *   },
+ *   // ... more accounts
+ * };
+ * appendCumulativeChartByAccount(multiAccountData, "lineChartElement");
+ */
+function appendCumulativeChartByAccount(multiAccountData, targetElementId) {
+    // Retrieve the graphDiv from the promise
+    Plotly.plot(targetElementId, []).then((gd) => {
+        for (const accountKey in multiAccountData) {
+            const data = multiAccountData[accountKey];
+
+            // Extract dates and cumulative amounts
+            var dates = Object.keys(data);
+            var cumulativeAmounts = Object.values(data);
+
+            // Convert dates to JavaScript Date objects for better handling
+            var dateObjects = dates.map(date => new Date(date));
+
+            // Create trace for the line chart
+            var trace = {
+                x: dateObjects,
+                y: cumulativeAmounts,
+                type: 'scatter',
+                mode: 'lines',
+                name: accountKey,
+            };
+
+            // Add trace to existing plot
+            Plotly.addTraces(gd, [trace]);
+        }
+    });
+}
 
 /**
  * Creates a histogram using Plotly based on category subtotals.
