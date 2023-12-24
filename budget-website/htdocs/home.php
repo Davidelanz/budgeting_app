@@ -341,6 +341,23 @@
                                     The system identifies <code>transfer</code> transactions and checks for possible issues such as missing corresponding transfers on the same day with the opposite amount.
                                     If such corresponding transfer is not found, the entry is flagged for validation.
                                 </p>
+                                <p>Total enties: <b id="totalEntries"></b></p>
+                                <script>
+                                    // Fetch data from the API endpoint
+                                    fetch('/api/validate/transfers.json')
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            // Extract the total number of entries
+                                            const totalEntries = data.length;
+                                            // Update the HTML content
+                                            document.getElementById('totalEntries').textContent = `${totalEntries}`;
+                                        })
+                                        .catch(error => {
+                                            console.error('Error fetching data:', error);
+                                            // Handle error, e.g., display an error message
+                                            document.getElementById('totalEntries').textContent = 'Error fetching data';
+                                        });
+                                </script>
                                 <div id="transfersValidationTable">
                                     <!-- Plotly table -->
                                 </div>

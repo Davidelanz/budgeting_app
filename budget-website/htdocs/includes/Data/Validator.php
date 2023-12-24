@@ -33,10 +33,11 @@ function validateTransfers($transactions)
             // Define a function to check for a corresponding transfer transaction
             $isCorrespondingTransfer = function ($t) use ($date, $amount, $account, $amountThreshold) {
                 // Check if it's the same day, amount is the same with opposite sign,
-                // the account is different, and it's a transfer
+                // the account is different (or the same, in case of temporary holds!),
+                // and it's a transfer
                 return $t['date'] === $date &&
                     abs((float)$t['amount'] + $amount) < $amountThreshold &&
-                    $t['account'] !== $account &&
+                    // $t['account'] !== $account &&
                     $t['operation'] === 'transfer';
             };
 
