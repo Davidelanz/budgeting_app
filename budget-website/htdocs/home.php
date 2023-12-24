@@ -329,6 +329,37 @@
                     </div>
                 </div>
 
+                <!-- Data Validation card -->
+                <div class="row">
+                    <div class="col">
+                        <div class="card mb-4 box-shadow">
+                            <h2 class="card-title m-4 mb-1">Data Validation</h2>
+                            <div class="card-body mx-2 pt-2">
+                                <h5 class="mb-2">Transfers Validation</h5>
+                                <p><a href="/api/validate/transfers.json"><code>GET /api/validate/transfers.json</code></a></p>
+                                <p>
+                                    The system identifies <code>transfer</code> transactions and checks for possible issues such as missing corresponding transfers on the same day with the opposite amount.
+                                    If such corresponding transfer is not found, the entry is flagged for validation.
+                                </p>
+                                <div id="transfersValidationTable">
+                                    <!-- Plotly table -->
+                                </div>
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                        fetch("/api/validate/transfers.json")
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                createTransactionsTable(data, "transfersValidationTable");
+                                            })
+                                            .catch(error => console.error("Error fetching data:", error));
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </main>

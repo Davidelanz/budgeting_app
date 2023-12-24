@@ -31,7 +31,7 @@ function transpose(matrix) {
  */
 function defaultLayout() {
     var layout = {
-        margin: { l: 0, r: 0, b: 0, t: 0 },
+        margin: { l: 50, r: 20, b: 40, t: 40 },
         paper_bgcolor: 'rgba(0,0,0,0)', // make it transparent
         plot_bgcolor: 'rgba(0,0,0,0)', // make it transparent
     };

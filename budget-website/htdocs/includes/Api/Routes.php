@@ -58,6 +58,10 @@ function Routes()
                 "handler" => "\Api\Accounts\getList",
                 "description" => "List all unique account names"
             ],
+            "/api/validate/transfers.json" => [
+                "handler" => "\Api\Validation\getTransferWarningsArrayofArrays",
+                "description" => "Return all transfers which are not successfully validated"
+            ],
         ],
     ];
 }
