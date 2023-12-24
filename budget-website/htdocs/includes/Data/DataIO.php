@@ -9,44 +9,56 @@ namespace Data\DataIO;
  */
 function dataDir()
 {
-    return dirname(dirname(dirname(__FILE__)));
+    return dirname(dirname(dirname(__FILE__))) . "/data/";
 }
 
 /**
- * Retrieves the path to the CSV data file.
+ * Reads data from all CSV files in the folder and returns an array of transactions.
  *
- * @return string The absolute path to the CSV data file.
- */
-function dataFileCSV()
-{
-    return dataDir() .  "/data/transactions.csv";
-}
-
-/**
- * Reads data from the CSV file and returns an array of transactions.
- *
- * This function reads data from the CSV file specified by `dataFileCSV()`. It parses
- * the CSV file, extracts headers, and creates an associative array for each row of data.
- * The resulting array represents transactions.
+ * This function reads data from all CSV files in the folder specified by `dataFolderCSV()`.
+ * It parses each CSV file, extracts headers, and creates an associative array for each row of data.
+ * The resulting arrays are then merged to represent all transactions.
  *
  * @return array An array of transactions, where each transaction is represented as an associative array.
- * @throws \Exception if the CSV file is not found.
+ * @throws \Exception if a CSV file is not found or if the CSV files have different columns.
  */
 function readCSV()
 {
-    $csvFile = dataFileCSV();
+    $folder = dataDir();
+    $csvFiles = glob($folder . '*.csv');
 
-    if (!file_exists($csvFile)) {
-        throw new \Exception("CSV file $csvFile not found");
+    if (empty($csvFiles)) {
+        throw new \Exception("No CSV files found in the folder $folder");
     }
 
-    $csvData = array_map("str_getcsv", file($csvFile));
-    $csvHeaders = array_shift($csvData);
     $transactions = [];
 
-    foreach ($csvData as $row) {
-        $transactions[] = array_combine($csvHeaders, $row);
+    // Initialize columns array with the columns of the first CSV
+    $columns = array_keys(array_flip(array_map('str_getcsv', file($csvFiles[0]))[0]));
+
+    foreach ($csvFiles as $csvFile) {
+        $csvData = array_map("str_getcsv", file($csvFile));
+        $csvHeaders = array_shift($csvData);
+
+        // Check if the CSV has the same columns as the first one
+        if ($columns !== array_keys(array_flip($csvHeaders))) {
+            throw new \Exception("CSV files have different columns");
+        }
+
+        // Merge transactions from the current CSV
+        foreach ($csvData as $row) {
+            $transactions[] = array_combine($csvHeaders, $row);
+        }
     }
+
+    // Sort transactions by ascending dates
+    usort($transactions, function ($a, $b) {
+        $dateA = strtotime($a['date']); // Assuming 'date' is the key for the date field
+        $dateB = strtotime($b['date']);
+        return $dateA - $dateB;
+    });
+
+    return $transactions;
 
     return $transactions;
 }
@@ -59,10 +71,18 @@ function readCSV()
  * data array is treated as headers, and subsequent rows represent data.
  *
  * @param array $data An array of data to be written to the CSV file.
+ * @param string $filename The name of the CSV file.
+ * @throws \Exception if the file already exists.
  */
-function writeCSV($data)
+function writeCSV($data, $filename)
 {
-    $csvFile = dataFileCSV();
+    $csvFile = dataDir() . $filename;
+
+    // Check if the file already exists
+    if (file_exists($csvFile)) {
+        throw new \Exception("File $filename already exists. Cannot overwrite an existing file.");
+    }
+
     $csv = fopen($csvFile, "w");
 
     // Write headers
