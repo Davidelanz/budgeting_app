@@ -174,6 +174,23 @@
                             <h2 class="card-title m-4 mb-1">All Transactions</h2>
                             <div class="card-body mx-2 pt-2">
                                 <p><a href="/api/transactions.json"><code>GET /api/transactions.json</code></a></p>
+                                <p>Total entries: <b id="totalTransactions"></b></p>
+                                <script>
+                                    // Fetch data from the API endpoint
+                                    fetch('/api/transactions.json')
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            // Extract the total number of entries
+                                            const totalEntries = data.length;
+                                            // Update the HTML content
+                                            document.getElementById('totalTransactions').textContent = `${totalEntries}`;
+                                        })
+                                        .catch(error => {
+                                            console.error('Error fetching data:', error);
+                                            // Handle error, e.g., display an error message
+                                            document.getElementById('totalTransactions').textContent = 'Error fetching data';
+                                        });
+                                </script>
                                 <div id="transactionsTable">
                                     <!-- Plotly table -->
                                 </div>
