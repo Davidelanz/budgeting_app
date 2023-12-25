@@ -84,7 +84,7 @@
                         <div class="card mb-4 box-shadow">
                             <h2 class="card-title m-4 mb-1">This Month by Category</h2>
                             <div class="card-body mx-2 pt-2">
-                                <p><a href="/api/transactions.json"><code>GET /api/transactions.json</code></a></p>
+                                <p><a href="/api/transactions/categories.json"><code>GET /api/transactions/categories.json</code></a></p>
                                 <div id="thisMonthHistogram">
                                     <!-- Plotly graph -->
                                 </div>
@@ -128,7 +128,7 @@
                         <div class="card mb-4 box-shadow">
                             <h2 class="card-title m-4 mb-1">This Year by Category</h2>
                             <div class="card-body mx-2 pt-2">
-                                <p><a href="/api/transactions.json"><code>GET /api/transactions.json</code></a></p>
+                                <p><a href="/api/transactions/categories.json"><code>GET /api/transactions/categories.json </code></a></p>
                                 <div id="thisYearHistogram">
                                     <!-- Plotly graph -->
                                 </div>
